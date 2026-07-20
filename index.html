@@ -1306,12 +1306,14 @@
       position: absolute;
       inset: 0;
       overflow: hidden;
+      pointer-events: none;
     }
     .login-wall-particle {
       position: absolute;
       border-radius: 50%;
       background: rgba(255,255,255,0.04);
       animation: lwFloat 10s ease-in-out infinite;
+      pointer-events: none;
     }
     .login-wall-particle:nth-child(1) { width: 300px; height: 300px; top: -80px; left: -80px; animation-delay: 0s; }
     .login-wall-particle:nth-child(2) { width: 200px; height: 200px; bottom: -50px; right: -50px; animation-delay: -3s; }
@@ -2113,12 +2115,9 @@
       showToast('Usunięto licencję dla aktualnie zalogowanego konta.');
     }
 
-    async function startDiscordLogin() {
+    function startDiscordLogin() {
       var state = generateRandomString(24);
-      var verifier = generateRandomString(64);
-      var challenge = await generateCodeChallenge(verifier);
       localStorage.setItem('discord-auth-state', state);
-      localStorage.setItem('discord-code-verifier', verifier);
 
       var params = new URLSearchParams({
         client_id: discordConfig.clientId,
@@ -2126,11 +2125,10 @@
         response_type: 'code',
         scope: discordConfig.scopes,
         state: state,
-        code_challenge: challenge,
-        code_challenge_method: 'S256'
+        prompt: 'consent'
       });
 
-      window.location.href = 'https://discord.com/oauth2/authorize?' + params.toString();
+      window.location.href = 'https://discord.com/api/oauth2/authorize?' + params.toString();
     }
 
     async function handleDiscordCallback() {
@@ -2138,7 +2136,6 @@
       var code = params.get('code');
       var state = params.get('state');
       var savedState = localStorage.getItem('discord-auth-state');
-      var verifier = localStorage.getItem('discord-code-verifier');
 
       if (!code || !state || !savedState || state !== savedState) {
         renderDiscordAuthUI();
@@ -2154,8 +2151,7 @@
             client_id: discordConfig.clientId,
             grant_type: 'authorization_code',
             code: code,
-            redirect_uri: discordConfig.redirectUri,
-            code_verifier: verifier || ''
+            redirect_uri: discordConfig.redirectUri
           }).toString()
         });
 
@@ -2176,7 +2172,6 @@
         localStorage.setItem('discord-user-profile', JSON.stringify(profile));
         await getUserRecord(profile);
         localStorage.removeItem('discord-auth-state');
-        localStorage.removeItem('discord-code-verifier');
         await renderDiscordAuthUI();
         hideLoginWall();
         showToast('Zalogowano jako ' + profile.username);
@@ -2185,7 +2180,6 @@
       } catch (error) {
         console.error(error);
         localStorage.removeItem('discord-auth-state');
-        localStorage.removeItem('discord-code-verifier');
         showToast(error.message || 'Błąd logowania Discord.');
       } finally {
         window.history.replaceState({}, document.title, window.location.pathname);
