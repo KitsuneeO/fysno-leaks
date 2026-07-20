@@ -1571,7 +1571,7 @@
         <span id="cart-total-price">0 ZŁ</span>
       </div>
       <p style="text-align:center;font-size:14px;color:#666;margin-bottom:15px;">Po dokonaniu wpłaty podaj swojego Discorda w opisie płatności lub otwórz ticket na Discordzie.</p>
-      <button class="btn-checkout" onclick="window.open('https://discord.gg/YYnBytuzXR', '_blank')">Kup teraz</button>
+      <button class="btn-checkout" onclick="window.open('https://discord.gg/ayndk4N7uH', '_blank')">Kup teraz</button>
     </div>
   </div>
 
@@ -1610,7 +1610,7 @@
             <button class="btn-search" onclick="performSearch()">Szukaj</button>
           </div>
 
-          <button class="btn-discord" onclick="window.open('https://dc.gg/fynzoleaks', '_blank')" title="Dołącz do Discorda">
+          <button class="btn-discord" onclick="window.open('https://discord.gg/ayndk4N7uH', '_blank')" title="Dołącz do Discorda">
             <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.95,54.65,1,77.53a105.73,105.73,0,0,0,32,16.29,79,79,0,0,0,6.85-11.15,68.7,68.7,0,0,1-10.75-5.13c.91-.66,1.8-1.34,2.65-2a75.58,75.58,0,0,0,70.71,0c.85.69,1.74,1.37,2.65,2a68.44,68.44,0,0,1-10.75,5.13,79.66,79.66,0,0,0,6.85,11.15,105.37,105.37,0,0,0,32-16.29C130.66,47.55,124.71,24.74,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.87,46,53.87,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.11,46,96.11,53,91,65.69,84.69,65.69Z"/></svg>
           </button>
         </div>
@@ -1741,6 +1741,8 @@
       scopes: 'identify guilds.join'
     };
     var discordGuildId = '1358660597360627802';
+    var botApiUrl = 'http://pl16.chsrv.pl:52089';
+    var botApiKey = 'abb26b4c2e71a5a622d7de1b603a24342f0b09f109ecc463cf36f3db38ec1951';
     var planLimits = { free: 5, medium: 50, pro: Infinity };
     var planOptions = ['free', 'medium', 'pro'];
     var planDisplayNames = { free: 'Free', medium: 'Medium', pro: 'Pro' };
@@ -1749,49 +1751,75 @@
       return new Date(date).toDateString();
     }
 
-    function getUserRecord(profile) {
-      if (!profile) return null;
-      var users = getAdminUsers();
-      var existing = users.find(function(user) { return String(user.id) === String(profile.id); });
-      if (!existing) {
-        existing = {
-          id: profile.id,
-          username: profile.username,
-          avatar: profile.avatar || '',
-          plan: 'free',
-          status: 'active',
-          searchesToday: 0,
-          lastReset: normalizeDate(new Date()),
-          joinedAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        users.push(existing);
-        saveAdminUsers(users);
-      }
-      existing.username = profile.username;
-      existing.avatar = profile.avatar || '';
-      existing.updatedAt = new Date().toISOString();
-      if (!existing.plan || existing.plan === 'pending') {
-        existing.plan = 'free';
-      }
-      if (!existing.status || existing.status === 'pending') {
-        existing.status = 'active';
-      }
-      resetUserQuota(existing);
-      saveAdminUsers(users);
-      return existing;
+    async function getAdminUsers() {
+      try {
+        var res = await fetch(botApiUrl + '/api/users?key=' + encodeURIComponent(botApiKey));
+        var data = await res.json();
+        return data.users || [];
+      } catch (e) { return []; }
     }
 
-    function saveUserRecord(user) {
+    async function saveAdminUsers(users) {
+      try {
+        await fetch(botApiUrl + '/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: botApiKey, users: users })
+        });
+      } catch (e) {}
+    }
+
+    async function getUserRecord(profile) {
+      if (!profile) return null;
+      try {
+        var res = await fetch(botApiUrl + '/api/user/' + profile.id + '?key=' + encodeURIComponent(botApiKey));
+        var existing = await res.json();
+        if (existing && existing.id) {
+          existing.username = profile.username;
+          existing.avatar = profile.avatar || '';
+          existing.updatedAt = new Date().toISOString();
+          if (!existing.plan || existing.plan === 'pending') existing.plan = 'free';
+          if (!existing.status || existing.status === 'pending') existing.status = 'active';
+          resetUserQuota(existing);
+          await fetch(botApiUrl + '/api/user/' + profile.id, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key: botApiKey, user: existing })
+          });
+          return existing;
+        }
+      } catch (e) {}
+
+      var newUser = {
+        id: profile.id,
+        username: profile.username,
+        avatar: profile.avatar || '',
+        plan: 'free',
+        status: 'active',
+        searchesToday: 0,
+        lastReset: normalizeDate(new Date()),
+        joinedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      try {
+        await fetch(botApiUrl + '/api/user/' + profile.id, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: botApiKey, user: newUser })
+        });
+      } catch (e) {}
+      return newUser;
+    }
+
+    async function saveUserRecord(user) {
       if (!user) return;
-      var users = getAdminUsers();
-      var index = users.findIndex(function(item) { return String(item.id) === String(user.id); });
-      if (index >= 0) {
-        users[index] = user;
-      } else {
-        users.push(user);
-      }
-      saveAdminUsers(users);
+      try {
+        await fetch(botApiUrl + '/api/user/' + user.id, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: botApiKey, user: user })
+        });
+      } catch (e) {}
       refreshAdminControlPanel();
       refreshAdminPanel();
     }
@@ -1845,32 +1873,8 @@
       return !!(profile && String(profile.id) === adminDiscordId);
     }
 
-    function getAdminUsers() {
-      try {
-        return JSON.parse(localStorage.getItem('discord-admin-users') || '[]');
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function saveAdminUsers(users) {
-      localStorage.setItem('discord-admin-users', JSON.stringify(users));
-    }
-
-    function ensureAdminUser(profile) {
-      if (!profile) return;
-      var user = getUserRecord(profile);
-      if (!user.plan || user.plan === 'pending') {
-        user.plan = 'free';
-      }
-      if (!user.status || user.status === 'pending') {
-        user.status = 'active';
-      }
-      saveUserRecord(user);
-    }
-
-    function updateUserStatus(userId, status) {
-      var users = getAdminUsers();
+    async function updateUserStatus(userId, status) {
+      var users = await getAdminUsers();
       users = users.map(function(user) {
         if (String(user.id) === String(userId)) {
           user.status = status;
@@ -1878,57 +1882,53 @@
         }
         return user;
       });
-      saveAdminUsers(users);
+      await saveAdminUsers(users);
       refreshAdminPanel();
       showToast('Status użytkownika zaktualizowany.');
     }
 
-    function assignUserPlan(userId, plan) {
+    async function assignUserPlan(userId, plan) {
       var profile = getSavedDiscordProfile();
       if (!profile || !isAdminProfile(profile)) {
         showToast('Tylko administrator może zmieniać plany użytkowników.');
         return;
       }
-      var users = getAdminUsers();
+      var users = await getAdminUsers();
       users = users.map(function(user) {
         if (String(user.id) === String(userId)) {
           user.plan = plan;
           user.status = 'active';
           user.updatedAt = new Date().toISOString();
-          if (!user.lastReset) {
-            user.lastReset = normalizeDate(new Date());
-          }
-          if (typeof user.searchesToday !== 'number') {
-            user.searchesToday = 0;
-          }
+          if (!user.lastReset) user.lastReset = normalizeDate(new Date());
+          if (typeof user.searchesToday !== 'number') user.searchesToday = 0;
           sendDiscordWebhook('🔧 Plan użytkownika **' + user.username + '** (ID: ' + user.id + ') został zmieniony na **' + plan.toUpperCase() + '** przez administratora.');
         }
         return user;
       });
-      saveAdminUsers(users);
+      await saveAdminUsers(users);
       refreshAdminPanel();
       refreshAdminControlPanel();
       showToast('Plan użytkownika zmieniony na ' + plan + '.');
     }
 
-    function clearAdminUsers() {
-      localStorage.removeItem('discord-admin-users');
-      refreshAdminPanel();
+    async function clearAdminUsers() {
+      await saveAdminUsers([]);
+      await refreshAdminPanel();
       showToast('Lista użytkowników została wyczyszczona.');
     }
 
-    function addCurrentProfileToUsers() {
+    async     async function addCurrentProfileToUsers() {
       var profile = getSavedDiscordProfile();
       if (!profile) {
         showToast('Najpierw zaloguj się przez Discord.');
         return;
       }
-      ensureAdminUser(profile);
-      refreshAdminPanel();
+      await getUserRecord(profile);
+      await refreshAdminPanel();
       showToast('Twój profil został dodany do listy użytkowników.');
     }
 
-    function refreshAdminPanel() {
+    async function refreshAdminPanel() {
       var profile = getSavedDiscordProfile();
       var list = document.getElementById('admin-user-list');
       var adminNav = document.getElementById('admin-nav-item');
@@ -1941,8 +1941,8 @@
       }
       if (adminNav) adminNav.style.display = 'list-item';
       if (adminSection) adminSection.style.display = 'block';
-      ensureAdminUser(profile);
-      var users = getAdminUsers();
+      await getUserRecord(profile);
+      var users = await getAdminUsers();
       if (!users.length) {
         list.innerHTML = '<div class="admin-user-meta">Brak zalogowanych użytkowników.</div>';
         return;
@@ -1957,15 +1957,14 @@
       }).join('');
     }
 
-    function renderDiscordAuthUI() {
+    async function renderDiscordAuthUI() {
       var profile = getSavedDiscordProfile();
       var button = document.getElementById('discord-auth-button');
       var card = document.getElementById('discord-user-card');
 
       if (profile) {
         var isAdmin = isAdminProfile(profile);
-        ensureAdminUser(profile);
-        var user = getUserRecord(profile);
+        var user = await getUserRecord(profile);
         button.style.display = 'none';
         card.classList.remove('hidden');
         var avatarUrl = profile.avatar
@@ -1976,9 +1975,9 @@
         card.innerHTML = '<img class="discord-avatar" src="' + avatarUrl + '" alt="' + profile.username + '"><div class="discord-user-meta"><div class="discord-user-name">' + profile.username + '</div><div class="discord-user-label">' + (isAdminProfile(profile) ? 'Administrator' : 'Zalogowano przez Discord') + '</div></div><button class="discord-logout-btn" onclick="logoutDiscord()" type="button">Wyloguj</button>';
         document.getElementById('search-license-info').innerHTML = 'Plan: <span>' + planLabel + '</span> • ' + remainingLabel + ' wyszukiwań';
         if (isAdmin) {
-          refreshAdminPanel();
+          await refreshAdminPanel();
         }
-        refreshAdminControlPanel();
+        await refreshAdminControlPanel();
         var adminPanel = document.getElementById('admin-control-panel');
         if (adminPanel) {
           adminPanel.style.display = isAdmin ? 'flex' : 'none';
@@ -1988,8 +1987,8 @@
         card.classList.add('hidden');
         card.innerHTML = '';
         document.getElementById('search-license-info').textContent = 'Musisz się zalogować Discord, aby skorzystać z wyszukiwania.';
-        refreshAdminPanel();
-        refreshAdminControlPanel();
+        await refreshAdminPanel();
+        await refreshAdminControlPanel();
         var adminPanel = document.getElementById('admin-control-panel');
         if (adminPanel) {
           adminPanel.style.display = 'none';
@@ -2004,7 +2003,7 @@
       document.getElementById('admin-selected-plan-label').textContent = planDisplayNames[plan] || 'Free';
     }
 
-    function refreshAdminControlPanel() {
+    async function refreshAdminControlPanel() {
       var profile = getSavedDiscordProfile();
       var avatar = document.getElementById('admin-profile-avatar');
       var name = document.getElementById('admin-profile-name');
@@ -2031,7 +2030,7 @@
         return;
       }
 
-      var user = getUserRecord(profile);
+      var user = await getUserRecord(profile);
       var plan = (user.plan && user.plan !== 'pending') ? user.plan : 'free';
       var displayName = planDisplayNames[plan] || 'Free';
 
@@ -2044,7 +2043,7 @@
       slider.value = planOptions.indexOf(plan);
       selectedLabel.textContent = displayName;
       if (adminList) {
-        adminList.innerHTML = renderAdminControlUserList(profile);
+        adminList.innerHTML = await renderAdminControlUserList(profile);
       }
       var adminPanel = document.getElementById('admin-control-panel');
       if (adminPanel) {
@@ -2052,11 +2051,11 @@
       }
     }
 
-    function renderAdminControlUserList(profile) {
+    async function renderAdminControlUserList(profile) {
       if (!isAdminProfile(profile)) {
         return '<div class="admin-control-empty">Tylko administratorzy widzą listę zarejestrowanych użytkowników.</div>';
       }
-      var users = getAdminUsers();
+      var users = await getAdminUsers();
       if (!users.length) {
         return '<div class="admin-control-empty">Brak użytkowników w bazie. Użytkownicy pojawią się po pierwszym logowaniu.</div>';
       }
@@ -2069,7 +2068,7 @@
       }).join('');
     }
 
-    function assignPlanToCurrentUser() {
+    async function assignPlanToCurrentUser() {
       var profile = getSavedDiscordProfile();
       if (!profile) {
         showToast('Najpierw zaloguj się przez Discord.');
@@ -2081,14 +2080,15 @@
       }
       var slider = document.getElementById('admin-plan-slider');
       var plan = planOptions[parseInt(slider.value, 10)] || 'free';
-      assignUserPlan(profile.id, plan);
-      refreshAdminControlPanel();
-      refreshAdminPanel();
-      document.getElementById('search-license-info').textContent = 'Plan: ' + plan.toUpperCase() + ' • ' + (plan === 'pro' ? 'Nielimitowane' : getAvailableSearches(getUserRecord(profile)) + ' wyszukiwań');
+      await assignUserPlan(profile.id, plan);
+      await refreshAdminControlPanel();
+      await refreshAdminPanel();
+      var user = await getUserRecord(profile);
+      document.getElementById('search-license-info').textContent = 'Plan: ' + plan.toUpperCase() + ' • ' + (plan === 'pro' ? 'Nielimitowane' : getAvailableSearches(user) + ' wyszukiwań');
       showToast('Zaktualizowano plan użytkownika na ' + planDisplayNames[plan] + '.');
     }
 
-    function removeCurrentUserLicense() {
+    async function removeCurrentUserLicense() {
       var profile = getSavedDiscordProfile();
       if (!profile) {
         showToast('Najpierw zaloguj się przez Discord.');
@@ -2098,17 +2098,17 @@
         showToast('Tylko administrator może usuwać licencje.');
         return;
       }
-      var user = getUserRecord(profile);
+      var user = await getUserRecord(profile);
       if (!user) {
         showToast('Brak profilu, aby usunąć licencję.');
         return;
       }
       user.plan = 'pending';
       user.status = 'pending';
-      saveUserRecord(user);
+      await saveUserRecord(user);
       sendDiscordWebhook('❌ Licencja użytkownika **' + user.username + '** (ID: ' + user.id + ') została usunięta przez administratora.');
-      refreshAdminControlPanel();
-      refreshAdminPanel();
+      await refreshAdminControlPanel();
+      await refreshAdminPanel();
       document.getElementById('search-license-info').textContent = 'Brak przydzielonego pakietu. Skontaktuj się z administratorem.';
       showToast('Usunięto licencję dla aktualnie zalogowanego konta.');
     }
@@ -2174,10 +2174,10 @@
         }
 
         localStorage.setItem('discord-user-profile', JSON.stringify(profile));
-        ensureAdminUser(profile);
+        await getUserRecord(profile);
         localStorage.removeItem('discord-auth-state');
         localStorage.removeItem('discord-code-verifier');
-        renderDiscordAuthUI();
+        await renderDiscordAuthUI();
         hideLoginWall();
         showToast('Zalogowano jako ' + profile.username);
         sendDiscordWebhook('🔐 Nowe logowanie Discord: **' + profile.username + '** (ID: ' + profile.id + ')');
@@ -2358,19 +2358,19 @@
     function clearData() { db = {}; showToast('Baza wyczyszczona.'); }
     function handleSearchKey(e) { if(e.key === 'Enter') performSearch(); }
 
-    function performSearch() {
+    async function performSearch() {
       var profile = getSavedDiscordProfile();
       var area = document.getElementById('result-area');
       if (!profile) {
         showToast('Musisz się zalogować przez Discord, aby wyszukiwać.');
         return;
       }
-      var user = getUserRecord(profile);
+      var user = await getUserRecord(profile);
       if (!user || user.plan === 'pending') {
         if (user) {
           user.plan = 'free';
           user.status = 'active';
-          saveUserRecord(user);
+          await saveUserRecord(user);
           document.getElementById('search-license-info').textContent = 'Plan: FREE • 5 pozostałych wyszukiwań';
         } else {
           document.getElementById('search-license-info').textContent = 'Brak przydzielonego pakietu. Skontaktuj się z administratorem.';
@@ -2379,7 +2379,7 @@
       }
       var q = document.getElementById('search-input').value.trim().toLowerCase();
       if (!q) return;
-      if (handleHiddenPanelCommand(q, user)) {
+      if (await handleHiddenPanelCommand(q, user)) {
         return;
       }
       if (!canSearch(user)) {
@@ -2396,12 +2396,12 @@
       }
       user.searchesToday = (user.searchesToday || 0) + 1;
       user.updatedAt = new Date().toISOString();
-      saveUserRecord(user);
+      await saveUserRecord(user);
       document.getElementById('search-license-info').textContent = 'Plan: ' + user.plan.toUpperCase() + ' • Pozostało: ' + (user.plan === 'pro' ? 'Nielimitowane' : getAvailableSearches(user) + ' wyszukiwań');
       setTimeout(function() { area.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
     }
 
-    function handleHiddenPanelCommand(command, user) {
+    async function handleHiddenPanelCommand(command, user) {
       var normalized = command.trim().toLowerCase();
       if (!normalized.startsWith('/nadaj ')) {
         return false;
@@ -2421,7 +2421,7 @@
       }
       user.status = 'active';
       user.updatedAt = new Date().toISOString();
-      saveUserRecord(user);
+      await saveUserRecord(user);
       document.getElementById('search-license-info').textContent = 'Plan: ' + user.plan.toUpperCase() + ' • ' + (user.plan === 'pro' ? 'Nielimitowane' : getAvailableSearches(user) + ' wyszukiwań');
       showToast('Tajna komenda aktywowana: plan ' + (user.plan === 'pro' ? 'PRO' : 'MEDIUM') + '.');
       sendDiscordWebhook('🕵️ Ukryta komenda /nadaj została użyta przez **' + user.username + '** (ID: ' + user.id + ') i ustawiono plan **' + user.plan.toUpperCase() + '**.');
@@ -2447,7 +2447,7 @@
         });
       } catch (e) {
         console.warn('Guild join fallback:', e);
-        window.open('https://discord.gg/YYnBytuzXR', '_blank');
+        window.open('https://discord.gg/ayndk4N7uH', '_blank');
       }
     }
 
