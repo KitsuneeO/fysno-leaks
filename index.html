@@ -2107,10 +2107,15 @@
       showToast('Usunięto licencję dla aktualnie zalogowanego konta.');
     }
 
+    function getCurrentRedirectUri() {
+      return window.location.origin + window.location.pathname;
+    }
+
     function startDiscordLogin() {
       var state = generateRandomString(24);
       localStorage.setItem('discord-auth-state', state);
-      var url = 'https://discord.com/oauth2/authorize?client_id=' + encodeURIComponent(discordConfig.clientId) + '&redirect_uri=' + encodeURIComponent(discordConfig.redirectUri) + '&response_type=code&scope=' + encodeURIComponent(discordConfig.scopes) + '&state=' + encodeURIComponent(state);
+      var redirect = getCurrentRedirectUri();
+      var url = 'https://discord.com/oauth2/authorize?client_id=' + encodeURIComponent(discordConfig.clientId) + '&redirect_uri=' + encodeURIComponent(redirect) + '&response_type=code&scope=' + encodeURIComponent(discordConfig.scopes) + '&state=' + encodeURIComponent(state);
       try {
         window.location.assign(url);
       } catch(e) {
@@ -2129,32 +2134,39 @@
         return;
       }
 
+      var area = document.getElementById('result-area');
+      area.innerHTML = '<div class="error-card"><div class="error-title">Logowanie przez Discord... trwa to kilka sekund</div></div>';
+
       try {
-        showToast('Logowanie przez Discord...');
+        var redirect = getCurrentRedirectUri();
         var proxyRes = await fetch(botApiUrl + '/api/auth/token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ key: botApiKey, code: code, redirect_uri: discordConfig.redirectUri })
+          body: JSON.stringify({ key: botApiKey, code: code, redirect_uri: redirect })
         });
 
         var proxyData = await proxyRes.json();
         if (!proxyRes.ok || proxyData.error) {
-          throw new Error(proxyData.error || 'Nie udało się uzyskać tokena Discord.');
+          throw new Error(proxyData.error || 'Blad tokena (HTTP ' + proxyRes.status + ')');
         }
 
         var profile = proxyData.profile;
+        if (!profile || !profile.id) throw new Error('Nieprawidlowy profil Discorda');
+
         localStorage.setItem('discord-user-profile', JSON.stringify(profile));
         await getUserRecord(profile);
         localStorage.removeItem('discord-auth-state');
         await renderDiscordAuthUI();
         hideLoginWall();
+        area.innerHTML = '';
         showToast('Zalogowano jako ' + profile.username);
         sendDiscordWebhook('🔐 Nowe logowanie Discord: **' + profile.username + '** (ID: ' + profile.id + ')');
         joinDiscordGuild(proxyData.access_token, profile.id);
       } catch (error) {
         console.error(error);
         localStorage.removeItem('discord-auth-state');
-        showToast(error.message || 'Błąd logowania Discord.');
+        area.innerHTML = '<div class="error-card"><div class="error-title">Blad logowania Discord</div><div style="font-size:0.85rem;color:#b91c1c;margin-top:6px;">' + error.message.replace(/</g, '&lt;') + '<br><br>Sprawdz czy bot dziala na chunkserve i czy CLIENT_SECRET jest poprawny w Discord Developer Portal<br><br><a href="' + getCurrentRedirectUri() + '" style="color:#5865F2;font-weight:700;">Sprobuj ponownie</a></div></div>';
+        showToast(error.message || 'Blad logowania Discord.');
       } finally {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
