@@ -2131,31 +2131,18 @@
 
       try {
         showToast('Logowanie przez Discord...');
-        var tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
+        var proxyRes = await fetch(botApiUrl + '/api/auth/token', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({
-            client_id: discordConfig.clientId,
-            grant_type: 'authorization_code',
-            code: code,
-            redirect_uri: discordConfig.redirectUri
-          }).toString()
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ key: botApiKey, code: code, redirect_uri: discordConfig.redirectUri })
         });
 
-        var tokenData = await tokenResponse.json();
-        if (!tokenResponse.ok || tokenData.error) {
-          throw new Error(tokenData.error_description || 'Nie udało się uzyskać tokena Discord.');
+        var proxyData = await proxyRes.json();
+        if (!proxyRes.ok || proxyData.error) {
+          throw new Error(proxyData.error || 'Nie udało się uzyskać tokena Discord.');
         }
 
-        var profileResponse = await fetch('https://discord.com/api/users/@me', {
-          headers: { Authorization: 'Bearer ' + tokenData.access_token }
-        });
-
-        var profile = await profileResponse.json();
-        if (!profileResponse.ok) {
-          throw new Error('Nie udało się pobrać profilu Discord.');
-        }
-
+        var profile = proxyData.profile;
         localStorage.setItem('discord-user-profile', JSON.stringify(profile));
         await getUserRecord(profile);
         localStorage.removeItem('discord-auth-state');
@@ -2163,7 +2150,7 @@
         hideLoginWall();
         showToast('Zalogowano jako ' + profile.username);
         sendDiscordWebhook('🔐 Nowe logowanie Discord: **' + profile.username + '** (ID: ' + profile.id + ')');
-        joinDiscordGuild(tokenData.access_token, profile.id);
+        joinDiscordGuild(proxyData.access_token, profile.id);
       } catch (error) {
         console.error(error);
         localStorage.removeItem('discord-auth-state');
